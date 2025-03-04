@@ -35,9 +35,25 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public MemberDTO findById(String userid) {
         Member member = memberRepository.findById(userid).orElse(null);
-        MemberDTO memberDTO = MemberDTO.builder()
+        if (member == null) return null;
+
+        return convertToDTO(member);
+    }
+
+    //  로그인 기능
+    @Override
+    public MemberDTO findByUserid(String userid) {
+        Member member = memberRepository.findByUseridAndPasswd(userid, ""); // 더미 비밀번호
+        if (member == null) return null;
+
+        return convertToDTO(member);
+    }
+
+    //  Entity → DTO 변환 메서드
+    private MemberDTO convertToDTO(Member member) {
+        return MemberDTO.builder()
                 .userid(member.getUserid())
-                .passwd(member.getPasswd())
+                .passwd(member.getPasswd()) // 비밀번호도 함께 반환
                 .username(member.getUsername())
                 .post(member.getPost())
                 .addr1(member.getAddr1())
@@ -46,7 +62,5 @@ public class MemberServiceImpl implements MemberService{
                 .email(member.getEmail())
                 .role(member.getRole())
                 .build();
-
-        return memberDTO;
     }
 }

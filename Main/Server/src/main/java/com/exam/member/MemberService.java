@@ -7,4 +7,7 @@ public interface MemberService {
 
     // mypage
     public MemberDTO findById(String userid);
+
+    // 로그인
+    public MemberDTO findByUserid(String userid);
 }
